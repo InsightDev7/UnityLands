@@ -1,0 +1,21 @@
+{
+  "name": "WebUnityLands",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "ViolTurOng",
+  "license": "ISC",
+  "type": "module",
+  "peerDependencies": {
+    "prettier": "^3.8.4"
+  },
+  "dependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "postgres": "^3.4.9",
+    "typeorm": "^1.0.0"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ]
+}

@@ -1,0 +1,11 @@
+unity-lands.com, www.unity-lands.com {
+	encode gzip
+
+	reverse_proxy frontend:4000
+}
+
+api.unity-lands.com {
+	encode gzip
+
+	reverse_proxy backend:3000
+}
