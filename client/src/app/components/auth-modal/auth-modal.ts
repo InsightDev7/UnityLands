@@ -2,10 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService, AuthTab } from '../../services/auth.service';
+import { IconComponent } from '../icon/icon';
 
 @Component({
   selector: 'app-auth-modal',
-  imports: [FormsModule],
+  imports: [FormsModule, IconComponent],
   template: `
     @if (auth.open()) {
       <div
@@ -22,7 +23,7 @@ import { AuthService, AuthTab } from '../../services/auth.service';
             aria-label="Close"
             class="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-lg text-gray-400 transition-all duration-200 hover:bg-white/5 hover:text-white"
           >
-            ✕
+            <app-icon name="close" class="text-lg" />
           </button>
 
           <div class="flex items-center justify-center gap-2">

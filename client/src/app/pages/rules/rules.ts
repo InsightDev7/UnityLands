@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IconComponent } from '../../components/icon/icon';
 
 interface Rule {
   id: string;
@@ -8,6 +10,7 @@ interface Rule {
 }
 
 interface Section {
+  icon: string;
   title: string;
   note?: string;
   allowed?: string;
@@ -20,10 +23,21 @@ interface Tab {
   sections: number[];
 }
 
+const EMOJI_MAP: Record<string, string> = {
+  '❌': 'close',
+  '✅': 'check_circle',
+  '🔸': 'diamond',
+  '▫️': 'fiber_manual_record',
+  '📋': 'description',
+  '📌': 'push_pin',
+  '⚠️': 'warning',
+};
+
 @Component({
   selector: 'app-rules',
+  imports: [IconComponent],
   template: `
-    <main class="mx-auto max-w-6xl px-6 pb-20 pt-28">
+    <main class="mx-auto max-w-6xl px-6 pb-16 pt-28">
       <div class="mb-10">
         <h1 class="text-5xl font-extrabold text-white">
           Правила
@@ -53,12 +67,13 @@ interface Tab {
 
       @for (section of visibleSections; track section.title) {
         <div class="mb-14 last:mb-0">
-          <h2 class="text-2xl font-bold text-white mb-6">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <app-icon [name]="section.icon" class="text-accent/80 text-2xl" />
             {{ section.title }}
           </h2>
 
           @if (section.note) {
-            <p class="mb-6 text-base sm:text-lg text-gray-300 leading-relaxed">{{ section.note }}</p>
+            <p class="mb-6 text-base sm:text-lg text-gray-300 leading-relaxed" [innerHTML]="formatText(section.note)"></p>
           }
 
           <div class="space-y-1">
@@ -69,15 +84,12 @@ interface Tab {
                 } @else {
                   <span class="mt-0.5 w-10 shrink-0"></span>
                 }
-                <p class="flex-1 text-base sm:text-lg text-gray-200 leading-relaxed">
-                  {{ rule.text }}
-                  @if (rule.note) {
-                    <span class="block mt-0.5 text-sm sm:text-base text-gray-500">{{ rule.note }}</span>
-                  }
+                <p class="flex-1 text-base sm:text-lg text-gray-200 leading-relaxed" [innerHTML]="formatText(rule.text)">
                 </p>
                 @if (rule.punishment) {
-                  <span class="shrink-0 self-start rounded-md bg-red-500/10 px-3 py-1 text-sm sm:text-base font-medium text-red-400 whitespace-nowrap">
-                    ⚠ {{ rule.punishment }}
+                  <span class="shrink-0 self-start rounded-md bg-red-500/10 px-3 py-1 text-sm sm:text-base font-medium text-red-400 whitespace-nowrap flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">warning</span>
+                    {{ rule.punishment }}
                   </span>
                 }
               </div>
@@ -89,7 +101,7 @@ interface Tab {
 
           @if (section.allowed) {
             <div class="mt-6 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-5 py-4">
-              <p class="text-base sm:text-lg text-emerald-300 leading-relaxed">{{ section.allowed }}</p>
+              <p class="text-base sm:text-lg text-emerald-300 leading-relaxed" [innerHTML]="formatText(section.allowed)"></p>
             </div>
           }
         </div>
@@ -98,6 +110,8 @@ interface Tab {
   `,
 })
 export class Rules {
+  private readonly sanitizer = inject(DomSanitizer);
+
   protected activeTab = 1;
 
   protected readonly tabs: Tab[] = [
@@ -113,9 +127,19 @@ export class Rules {
     return tab ? tab.sections.map((i) => this.sections[i]) : [];
   }
 
+  protected formatText(text: string): SafeHtml {
+    let html = text;
+    for (const [emoji, icon] of Object.entries(EMOJI_MAP)) {
+      const escaped = emoji.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      html = html.replace(new RegExp(escaped, 'g'), `<span class="material-symbols-outlined align-middle text-base text-accent/70 -mt-0.5">${icon}</span>`);
+    }
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
   protected readonly sections: Section[] = [
     {
-      title: '💎 1. Загальні правила та акаунт',
+      icon: 'diamond',
+      title: '1. Загальні правила та акаунт',
       rules: [
         { id: '2.0', text: 'Заборонено використовувати лазівки у правилах для власної вигоди.', punishment: 'Бан 12 годин ➔ 1 тиждень' },
         { id: '2.1', text: 'Власники та персонал не несуть відповідальності за ваші невиправдані очікування від проєкту.', punishment: 'Не передбачене' },
@@ -127,7 +151,8 @@ export class Rules {
       ],
     },
     {
-      title: '💎 2. Поведінка та етика',
+      icon: 'diamond',
+      title: '2. Поведінка та етика',
       rules: [
         { id: '2.7', text: 'Заборонені образи, провокації та дискримінація.', punishment: 'Мут 30 хвилин ➔ 24 години' },
         { id: '2.8', text: 'Суворо заборонені образи родичів.', punishment: 'Мут 24 години' },
@@ -139,7 +164,8 @@ export class Rules {
       ],
     },
     {
-      title: '💎 3. Ігровий процес та будівництво',
+      icon: 'diamond',
+      title: '3. Ігровий процес та будівництво',
       rules: [
         { id: '2.14', text: 'Заборонені образливі нікнейми, скіни або плащі.', punishment: 'Прохання змінити ➔ Бан назавжди' },
         { id: '2.15', text: 'Заборонена побудова заборонених символів (екстремістських тощо).', punishment: 'Бан 12 годин + видалення будівлі' },
@@ -150,7 +176,8 @@ export class Rules {
       ],
     },
     {
-      title: '💎 4. Використання ПЗ та модів',
+      icon: 'diamond',
+      title: '4. Використання ПЗ та модів',
       note: 'СУВОРО ЗАБОРОНЕНО використання чіт-клієнтів (Meteor, Impact, Wurst, Celestial тощо), а також:',
       rules: [
         { id: '', text: '❌ X-Ray, Baritone, Speedhack, Fly, KillAura' },
@@ -158,10 +185,11 @@ export class Rules {
         { id: '', text: '❌ Моди для крашу сервера, пошуку сіда світу або фантомних блоків' },
         { id: '', text: 'Покарання:', note: 'Бан назавжди' },
       ],
-      allowed: 'ДОЗВОЛЕНІ МОДИ: ✅ Оптимізація та QoL-моди (Sodium, Optifine, Iris) ✅ Індикатори броні / ефектів (AppleSkin) ✅ Schematic, ReplayMod, Litematica ✅ Zoom, Міні-карта (без показу данжів/гравців), AutoFish ✅ Автоклікер (тільки для фармілок мобів)',
+      allowed: '✅ Оптимізація та QoL-моди (Sodium, Optifine, Iris) ✅ Індикатори броні / ефектів (AppleSkin) ✅ Schematic, ReplayMod, Litematica ✅ Zoom, Міні-карта (без показу данжів/гравців), AutoFish ✅ Автоклікер (тільки для фармілок мобів)',
     },
     {
-      title: '💎 5. Ігрові зони та території',
+      icon: 'diamond',
+      title: '5. Ігрові зони та території',
       rules: [
         { id: '2.26', text: 'Сервер розділений на спеціальні зони з різними правилами та механіками.' },
         { id: '', text: '▫️ Зона спавну — PvP: заборонено, Будівництво: заборонено (доступ лише для гравців з роллю Discord "Builder"). Територія: 420×420 навколо (0,0)' },
@@ -173,7 +201,8 @@ export class Rules {
       ],
     },
     {
-      title: '💎 5.1 Правила PvP-зони',
+      icon: 'diamond',
+      title: '5.1 Правила PvP-зони',
       rules: [
         { id: '2.27', text: 'На цій території діють особливі умови бою. Входячи сюди, ви погоджуєтесь із наступним:' },
         { id: '', text: '🔸 Повна свобода — Дозволені будь-які ігрові механіки, зілля та тактики. Ви дієте на власний ризик.' },
@@ -183,7 +212,8 @@ export class Rules {
       ],
     },
     {
-      title: '💎 6. PvP та бойові зони',
+      icon: 'diamond',
+      title: '6. PvP та бойові зони',
       rules: [
         { id: '2.35', text: 'PvP дозволене ТІЛЬКИ у спеціально визначених PvP-зонах сервера.' },
         { id: '2.36', text: 'PvP заборонене на території спавну, на приватній території гравців (крім випадків, дозволених власником), на території кланів (крім випадків, дозволених кланом), поза офіційними PvP-зонами.' },
@@ -192,7 +222,8 @@ export class Rules {
       ],
     },
     {
-      title: '💎 7. Лаг-машини та AFK',
+      icon: 'diamond',
+      title: '7. Лаг-машини та AFK',
       rules: [
         { id: '2.39', text: 'AFK та AFK-ферми дозволені, якщо вони не створюють велике навантаження на сервер.' },
         { id: '2.40', text: 'Заборонено створювати лаг-машини або механізми, що викликають перевантаження сервера.', punishment: 'Видалення ➔ Тимчасовий бан ➔ Бан назавжди (у разі відмови прибрати)' },
@@ -200,7 +231,8 @@ export class Rules {
       ],
     },
     {
-      title: '🛡️ Правила для персоналу',
+      icon: 'shield',
+      title: 'Правила для персоналу',
       rules: [
         { id: '2.41', text: 'Дотримуватися правил сервера та допомагати гравцям.' },
         { id: '2.42', text: 'Заборонено зловживати владою або використовувати її для власної вигоди.' },
@@ -210,7 +242,8 @@ export class Rules {
       ],
     },
     {
-      title: '⚙️ Додаткові механіки',
+      icon: 'settings',
+      title: 'Додаткові механіки',
       rules: [
         { id: '', text: '🔸 Ванільність та привати: На нашому сервері немає штучних приватів територій (команд /claim чи /res). Ми граємо у форматі повної ваніли, де безпека базується на взаємній повазі.' },
         { id: '', text: '🔸 Відкати та компенсації: Ми не повертаємо речі, втрачені внаслідок ігрового процесу (смерть у лаві, вибух кріпера, падіння). Відкат інвентарю можливий тільки у випадку доведеного гриферства (після перевірки логів) або критичного технічного збою сервера.' },

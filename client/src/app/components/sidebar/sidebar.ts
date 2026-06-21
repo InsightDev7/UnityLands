@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { I18nService } from '../../core/i18n/i18n.service';
+import { IconComponent } from '../icon/icon';
 
 @Component({
   selector: 'app-sidebar',
+  imports: [IconComponent],
   template: `
     <aside class="space-y-6">
       <div
@@ -18,22 +20,22 @@ import { I18nService } from '../../core/i18n/i18n.service';
         </div>
         <dl class="mt-4 space-y-3 text-sm">
           <div class="flex items-center justify-between">
-            <dt class="text-gray-400">Players online</dt>
+            <dt class="text-gray-400">{{ i18n.t('sidebar.status.players') }}</dt>
             <dd class="font-medium text-white">124 / 200</dd>
           </div>
           <div class="flex items-center justify-between">
-            <dt class="text-gray-400">Version</dt>
-            <dd class="font-medium text-white">1.21.x</dd>
+            <dt class="text-gray-400">{{ i18n.t('sidebar.status.version') }}</dt>
+            <dd class="font-medium text-white">1.21.11</dd>
           </div>
           <div class="flex items-center justify-between">
-            <dt class="text-gray-400">Uptime</dt>
+            <dt class="text-gray-400">{{ i18n.t('sidebar.status.uptime') }}</dt>
             <dd class="font-medium text-white">99.9%</dd>
           </div>
         </dl>
         <div
           class="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-surface-2 px-3 py-2"
         >
-          <code class="text-sm text-accent">play.unitylands.gg</code>
+          <code class="text-sm text-accent">mc.unitylands.cc</code>
           <span class="text-xs text-gray-500">{{ i18n.t('sidebar.copy') }}</span>
         </div>
       </div>
@@ -89,11 +91,12 @@ import { I18nService } from '../../core/i18n/i18n.service';
         <div class="mt-4 grid grid-cols-3 gap-2">
           @for (social of socials; track social.label) {
             <a
-              href="#"
+              [href]="social.url"
+              target="_blank"
               [attr.aria-label]="social.label"
               class="flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-surface-2 py-3 text-gray-300 transition-all duration-200 hover:border-accent/40 hover:text-accent"
             >
-              <span class="text-xl">{{ social.icon }}</span>
+              <app-icon [name]="social.icon" class="text-xl" />
               <span class="text-[11px]">{{ social.label }}</span>
             </a>
           }
@@ -106,8 +109,11 @@ export class Sidebar {
   protected readonly i18n = inject(I18nService);
 
   protected readonly socials = [
-    { icon: '💬', label: 'Discord' },
-    { icon: '▶', label: 'YouTube' },
-    { icon: '𝕏', label: 'Twitter' },
+    { icon: 'smart_display', label: 'TikTok', url: 'https://www.tiktok.com/@unitylands.cc' },
+    { icon: 'smart_display', label: 'TikTok Media', url: 'https://www.tiktok.com/@unitylands.media' },
+    { icon: 'send', label: 'Telegram', url: 'https://t.me/unitylands' },
+    { icon: 'play_circle', label: 'YouTube', url: 'https://www.youtube.com/@UnityLands' },
+    { icon: 'photo_camera', label: 'Instagram', url: 'https://www.instagram.com/unitylands.cc' },
+    { icon: 'language', label: 'Сайт', url: 'https://unitylands.cc/' },
   ];
 }

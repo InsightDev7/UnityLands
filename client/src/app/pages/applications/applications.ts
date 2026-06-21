@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ApplicationCreator } from './application-creator/application-creator';
+import { IconComponent } from '../../components/icon/icon';
 
 type AppTab = 'apply' | 'review' | 'create' | 'history';
 type AppStatus = 'pending' | 'approved' | 'rejected';
@@ -31,9 +32,9 @@ interface Submission {
 
 @Component({
   selector: 'app-applications',
-  imports: [FormsModule, ApplicationCreator],
+  imports: [FormsModule, ApplicationCreator, IconComponent],
   template: `
-    <main class="mx-auto max-w-5xl px-6 pb-16 pt-28">
+    <main class="mx-auto max-w-6xl px-6 pb-16 pt-28">
       <h1 class="text-3xl font-bold sm:text-4xl">
         <span class="text-brand-gradient">Заявки</span>
       </h1>
@@ -56,7 +57,7 @@ interface Submission {
             [class.tab-active]="activeTab() === tab.id"
             (click)="activeTab.set(tab.id)"
           >
-            <span>{{ tab.icon }}</span> {{ tab.label }}
+            <app-icon [name]="tab.icon" class="text-base" /> {{ tab.label }}
           </button>
         }
       </nav>
@@ -76,8 +77,8 @@ interface Submission {
                   >
                     <div class="flex items-center gap-3">
                       <span
-                        class="grid h-10 w-10 place-items-center rounded-xl bg-brand-gradient text-lg text-white"
-                        >{{ pos.icon }}</span
+                        class="grid h-10 w-10 place-items-center rounded-xl bg-brand-gradient text-white"
+                        ><app-icon [name]="pos.icon" class="text-lg" /></span
                       >
                       <h3 class="font-semibold text-white">{{ pos.title }}</h3>
                     </div>
@@ -246,10 +247,10 @@ export class Applications {
     icon: string;
     minLevel: number;
   }[] = [
-    { id: 'apply', label: 'Відгукнутися', icon: '📝', minLevel: 1 },
-    { id: 'review', label: 'Переглянути заявки', icon: '📋', minLevel: 3 },
-    { id: 'create', label: 'Створити заявку', icon: '➕', minLevel: 3 },
-    { id: 'history', label: 'Історія заявок', icon: '🕓', minLevel: 3 },
+    { id: 'apply', label: 'Відгукнутися', icon: 'note_add', minLevel: 1 },
+    { id: 'review', label: 'Переглянути заявки', icon: 'description', minLevel: 3 },
+    { id: 'create', label: 'Створити заявку', icon: 'add_circle', minLevel: 3 },
+    { id: 'history', label: 'Історія заявок', icon: 'history', minLevel: 3 },
   ];
 
   protected readonly tabs = computed(() =>
@@ -270,9 +271,9 @@ export class Applications {
 
   // ── Theoretical data (front-end only until the backend lands) ──
   protected readonly positions = signal<Position[]>([
-    { id: 1, title: 'Підтримка', desc: 'Допомагай гравцям у чаті та обробляй тікети.', icon: '🎧', open: true },
-    { id: 2, title: 'Будівельник', desc: 'Будуй спавн та мапи для івентів.', icon: '🏗️', open: true },
-    { id: 3, title: 'Модератор', desc: 'Підтримуй порядок і чесну гру.', icon: '🛡️', open: false },
+    { id: 1, title: 'Підтримка', desc: 'Допомагай гравцям у чаті та обробляй тікети.', icon: 'headphones', open: true },
+    { id: 2, title: 'Будівельник', desc: 'Будуй спавн та мапи для івентів.', icon: 'construction', open: true },
+    { id: 3, title: 'Модератор', desc: 'Підтримуй порядок і чесну гру.', icon: 'shield', open: false },
   ]);
 
   protected readonly myApps = signal<MyApplication[]>([]);

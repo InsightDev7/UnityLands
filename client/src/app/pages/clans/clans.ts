@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { I18nService } from '../../core/i18n/i18n.service';
+import { IconComponent } from '../../components/icon/icon';
 
 @Component({
   selector: 'app-clans',
+  imports: [IconComponent],
   template: `
     <main class="mx-auto max-w-6xl px-6 pb-16 pt-28">
       <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
@@ -37,7 +39,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
             <div
               class="mt-5 flex items-center justify-between border-t border-white/5 pt-4 text-sm"
             >
-              <span class="text-gray-400">👥 {{ clan.members }} {{ i18n.t('clans.members') }}</span>
+              <span class="inline-flex items-center gap-1 text-gray-400"><app-icon name="group" class="text-sm" /> {{ clan.members }} {{ i18n.t('clans.members') }}</span>
               <a
                 href="#"
                 class="font-semibold text-accent transition-all duration-200 hover:text-accent-soft"

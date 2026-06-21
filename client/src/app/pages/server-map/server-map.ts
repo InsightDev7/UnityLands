@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { I18nService } from '../../core/i18n/i18n.service';
+import { IconComponent } from '../../components/icon/icon';
 
 @Component({
   selector: 'app-server-map',
+  imports: [IconComponent],
   template: `
     <main class="mx-auto max-w-6xl px-6 pb-16 pt-28">
       <h1 class="text-3xl font-bold sm:text-4xl">
@@ -46,7 +48,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
               <div
                 class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-brand-gradient text-3xl text-surface shadow-brand-glow"
               >
-                🗺️
+                <app-icon name="map" class="text-3xl" />
               </div>
               <p class="mt-4 font-semibold text-white">
                 {{ i18n.t('map.placeholder') }}

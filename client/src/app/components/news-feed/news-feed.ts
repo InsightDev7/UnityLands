@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { I18nService } from '../../core/i18n/i18n.service';
+import { IconComponent } from '../icon/icon';
 
 @Component({
   selector: 'app-news-feed',
+  imports: [IconComponent],
   template: `
     <section id="news" class="space-y-6">
       <div class="flex items-end justify-between">
@@ -21,7 +23,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
           <div
             class="bg-glow flex items-center justify-center bg-surface-2 text-5xl sm:w-44 sm:shrink-0"
           >
-            <span class="py-10 sm:py-0">{{ item.emoji }}</span>
+            <app-icon [name]="item.icon" class="py-10 text-5xl sm:py-0" />
           </div>
           <div class="flex flex-1 flex-col p-6">
             <div class="flex items-center gap-3 text-xs">
@@ -50,8 +52,8 @@ export class NewsFeed {
   protected readonly i18n = inject(I18nService);
 
   protected readonly news = [
-    { id: '1', date: '10 червня 2026', emoji: '🚀' },
-    { id: '2', date: '4 червня 2026', emoji: '🏗️' },
-    { id: '3', date: '28 травня 2026', emoji: '🎉' },
+    { id: '1', date: '10 червня 2026', icon: 'rocket_launch' },
+    { id: '2', date: '4 червня 2026', icon: 'construction' },
+    { id: '3', date: '28 травня 2026', icon: 'celebration' },
   ];
 }

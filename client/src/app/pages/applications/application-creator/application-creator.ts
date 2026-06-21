@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { DatePicker } from '../../../components/date-picker/date-picker';
 import { Select } from '../../../components/select/select';
+import { IconComponent } from '../../../components/icon/icon';
 
 interface RoleOption {
   id: string;
@@ -17,7 +18,7 @@ interface BackgroundTemplate {
 
 @Component({
   selector: 'app-application-creator',
-  imports: [FormsModule, DatePicker, Select],
+  imports: [FormsModule, DatePicker, Select, IconComponent],
   template: `
     <div class="grid gap-6 lg:grid-cols-3">
       <!-- Main column: editor + duration params -->
@@ -306,7 +307,7 @@ interface BackgroundTemplate {
             (dragover)="$event.preventDefault()"
             (drop)="onDrop($event)"
           >
-            <span class="text-2xl">⬆️</span>
+            <app-icon name="upload" class="text-3xl" />
             Перетягніть файл сюди або натисніть, щоб обрати
             <input
               type="file"

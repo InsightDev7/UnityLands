@@ -10,10 +10,11 @@ import {
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../core/i18n/i18n.service';
+import { IconComponent } from '../icon/icon';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, IconComponent],
   template: `
     <header
       class="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-surface/70 backdrop-blur-xl"
@@ -37,7 +38,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
                 [routerLinkActiveOptions]="{ exact: true }"
                 class="nav-link"
               >
-                <span class="nav-ico">{{ link.icon }}</span>
+                <app-icon [name]="link.icon" class="nav-ico" />
                 {{ i18n.t(link.key) }}
               </a>
             </li>
@@ -106,10 +107,10 @@ import { I18nService } from '../../core/i18n/i18n.service';
                       class="rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-medium text-gray-200"
                       >Lvl {{ level }}</span
                     >
-                    <span
-                      class="rounded-full bg-amber-400/15 px-2 py-0.5 text-[11px] font-semibold text-amber-300"
-                      >🪙 {{ coins.toLocaleString() }}</span
-                    >
+                      <span
+                       class="inline-flex items-center gap-1 rounded-full bg-amber-400/15 px-2 py-0.5 text-[11px] font-semibold text-amber-300"
+                       ><app-icon name="payments" class="text-xs" /> {{ coins.toLocaleString() }}</span
+                     >
                   </div>
                 </div>
 
@@ -123,7 +124,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
                       (click)="close()"
                       class="menu-link"
                     >
-                      <span class="nav-ico">👤</span> {{ i18n.t('menu.profile') }}
+                      <app-icon name="person" class="nav-ico" /> {{ i18n.t('menu.profile') }}
                     </a>
                   </li>
                   <li>
@@ -134,7 +135,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
                       (click)="close()"
                       class="menu-link"
                     >
-                      <span class="nav-ico">📝</span>
+                      <app-icon name="note_add" class="nav-ico" />
                       {{ i18n.t('menu.applications') }}
                     </a>
                   </li>
@@ -147,7 +148,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
                         (click)="close()"
                         class="menu-link"
                       >
-                        <span class="nav-ico">⚙️</span> {{ i18n.t('menu.admin') }}
+                        <app-icon name="settings" class="nav-ico" /> {{ i18n.t('menu.admin') }}
                       </a>
                     </li>
                   }
@@ -163,10 +164,10 @@ import { I18nService } from '../../core/i18n/i18n.service';
                   >
                     <span>{{ i18n.t('menu.signout') }}</span>
                     <span
-                      class="grid h-7 w-7 place-items-center rounded-full border border-red-400/40 text-red-400"
-                    >
-                      ⏻
-                    </span>
+                       class="grid h-7 w-7 place-items-center rounded-full border border-red-400/40 text-red-400"
+                     >
+                       <app-icon name="logout" class="text-sm" />
+                     </span>
                   </button>
                 </div>
               </div>
@@ -201,11 +202,11 @@ export class Navbar {
   private readonly dropdown = viewChild<ElementRef<HTMLElement>>('dropdown');
 
   protected readonly links = [
-    { key: 'nav.home', path: '/', icon: '🏠' },
-    { key: 'nav.rules', path: '/rules', icon: '📜' },
-    { key: 'nav.clans', path: '/clans', icon: '🛡️' },
-    { key: 'nav.map', path: '/map', icon: '🗺️' },
-    { key: 'nav.applications', path: '/applications', icon: '📝' },
+    { key: 'nav.home', path: '/', icon: 'home' },
+    { key: 'nav.rules', path: '/rules', icon: 'description' },
+    { key: 'nav.clans', path: '/clans', icon: 'shield' },
+    { key: 'nav.map', path: '/map', icon: 'map' },
+    { key: 'nav.applications', path: '/applications', icon: 'note_add' },
   ];
 
   // First two letters of the username, for the avatar placeholder.

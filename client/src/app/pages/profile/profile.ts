@@ -2,13 +2,14 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../core/i18n/i18n.service';
+import { IconComponent } from '../../components/icon/icon';
 
 @Component({
   selector: 'app-profile',
-  imports: [DatePipe],
+  imports: [DatePipe, IconComponent],
   template: `
     @if (auth.currentUser(); as user) {
-      <main class="mx-auto max-w-5xl px-6 pb-16 pt-28">
+      <main class="mx-auto max-w-6xl px-6 pb-16 pt-28">
         <section
           class="bg-glow relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-md"
         >
@@ -34,8 +35,8 @@ import { I18nService } from '../../core/i18n/i18n.service';
                   >{{ i18n.t('profile.level') }} {{ level }}</span
                 >
                 <span
-                  class="flex items-center gap-1 rounded-full bg-amber-400/15 px-3 py-1 text-xs font-semibold text-amber-300"
-                  >🪙 {{ coins.toLocaleString() }}</span
+                  class="inline-flex items-center gap-1 rounded-full bg-amber-400/15 px-3 py-1 text-xs font-semibold text-amber-300"
+                  ><app-icon name="payments" class="text-amber-300 text-xs" /> {{ coins.toLocaleString() }}</span
                 >
               </div>
               <p class="mt-1 text-gray-400">{{ user.email }}</p>
@@ -64,7 +65,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
               class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md"
             >
               <div class="flex items-center gap-2 text-sm text-gray-400">
-                <span>{{ stat.icon }}</span> {{ i18n.t(stat.labelKey) }}
+                <app-icon [name]="stat.icon" class="text-base" /> {{ i18n.t(stat.labelKey) }}
               </div>
               <p class="mt-2 text-2xl font-bold text-brand-gradient">
                 {{ stat.value }}
@@ -95,7 +96,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
                     "
                     [title]="i18n.t(badge.nameKey)"
                   >
-                    <span class="text-2xl">{{ badge.icon }}</span>
+                    <app-icon [name]="badge.icon" class="text-2xl" />
                     <span class="truncate text-[11px] text-gray-300">{{
                       i18n.t(badge.nameKey)
                     }}</span>
@@ -118,7 +119,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
                           ? 'bg-brand-gradient'
                           : 'bg-surface-2'
                       "
-                      >{{ a.icon }}</span
+                       ><app-icon [name]="a.icon" class="text-xl" /></span
                     >
                     <div class="min-w-0 flex-1">
                       <div class="flex items-center justify-between">
@@ -181,8 +182,8 @@ import { I18nService } from '../../core/i18n/i18n.service';
               <div
                 class="rounded-xl border border-amber-400/20 bg-amber-400/10 p-4 text-center"
               >
-                <p class="text-3xl font-bold text-amber-300">
-                  🪙 {{ coins.toLocaleString() }}
+                <p class="inline-flex items-center gap-2 text-3xl font-bold text-amber-300">
+                  <app-icon name="payments" class="text-3xl" /> {{ coins.toLocaleString() }}
                 </p>
                 <p class="mt-1 text-xs text-gray-400">{{ i18n.t('profile.coins') }}</p>
               </div>
@@ -216,7 +217,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
                     class="flex items-center justify-between rounded-xl border border-white/10 bg-surface-2 px-3 py-2"
                   >
                     <span class="flex items-center gap-2 text-sm text-gray-200">
-                      <span>{{ c.icon }}</span> {{ c.label }}
+                      <app-icon [name]="c.icon" class="text-base" /> {{ c.label }}
                     </span>
                     @if (c.linked) {
                       <span class="text-xs text-accent">{{ i18n.t('profile.linked') }}</span>
@@ -250,56 +251,56 @@ export class Profile {
   protected readonly clan = { name: 'Nova Empire', role: 'Учасник' };
 
   protected readonly stats = [
-    { labelKey: 'profile.stats.playtime', value: '210h', icon: '⏱️' },
-    { labelKey: 'profile.stats.kd', value: '410 / 95', icon: '⚔️' },
-    { labelKey: 'profile.stats.blocks', value: '128k', icon: '🧱' },
-    { labelKey: 'profile.stats.achievements', value: '34', icon: '🏆' },
+    { labelKey: 'profile.stats.playtime', value: '210h', icon: 'timer' },
+    { labelKey: 'profile.stats.kd', value: '410 / 95', icon: 'swords' },
+    { labelKey: 'profile.stats.blocks', value: '128k', icon: 'grid_view' },
+    { labelKey: 'profile.stats.achievements', value: '34', icon: 'emoji_events' },
   ];
 
   protected readonly badges = [
-    { nameKey: 'profile.badge.first', icon: '🌱', earned: true },
-    { nameKey: 'profile.badge.builder', icon: '🏗️', earned: true },
-    { nameKey: 'profile.badge.warrior', icon: '⚔️', earned: true },
-    { nameKey: 'profile.badge.explorer', icon: '🧭', earned: true },
-    { nameKey: 'profile.badge.trader', icon: '💰', earned: false },
-    { nameKey: 'profile.badge.veteran', icon: '🎖️', earned: false },
-    { nameKey: 'profile.badge.champion', icon: '👑', earned: false },
-    { nameKey: 'profile.badge.legend', icon: '🐉', earned: false },
-    { nameKey: 'profile.badge.founder', icon: '⭐', earned: true },
-    { nameKey: 'profile.badge.event', icon: '🎉', earned: false },
+    { nameKey: 'profile.badge.first', icon: 'eco', earned: true },
+    { nameKey: 'profile.badge.builder', icon: 'construction', earned: true },
+    { nameKey: 'profile.badge.warrior', icon: 'shield', earned: true },
+    { nameKey: 'profile.badge.explorer', icon: 'explore', earned: true },
+    { nameKey: 'profile.badge.trader', icon: 'payments', earned: false },
+    { nameKey: 'profile.badge.veteran', icon: 'military_tech', earned: false },
+    { nameKey: 'profile.badge.champion', icon: 'star', earned: false },
+    { nameKey: 'profile.badge.legend', icon: 'auto_awesome', earned: false },
+    { nameKey: 'profile.badge.founder', icon: 'stars', earned: true },
+    { nameKey: 'profile.badge.event', icon: 'celebration', earned: false },
   ];
 
   protected readonly achievements = [
     {
       titleKey: 'profile.achieve.lvl10',
       descKey: 'profile.achieve.lvl10Desc',
-      icon: '📈',
+      icon: 'show_chart',
       progress: 70,
     },
     {
       titleKey: 'profile.achieve.builder',
       descKey: 'profile.achieve.builderDesc',
-      icon: '🧱',
+      icon: 'grid_view',
       progress: 100,
     },
     {
       titleKey: 'profile.achieve.clan',
       descKey: 'profile.achieve.clanDesc',
-      icon: '🛡️',
+      icon: 'shield',
       progress: 100,
     },
     {
       titleKey: 'profile.achieve.pvp',
       descKey: 'profile.achieve.pvpDesc',
-      icon: '⚔️',
+      icon: 'swords',
       progress: 40,
     },
   ];
 
   protected readonly connections = [
-    { label: 'Discord', icon: '💬', linked: true },
-    { label: 'Steam', icon: '🎮', linked: false },
-    { label: 'Twitch', icon: '📺', linked: false },
+    { label: 'Discord', icon: 'chat', linked: true },
+    { label: 'Steam', icon: 'sports_esports', linked: false },
+    { label: 'Twitch', icon: 'live_tv', linked: false },
   ];
 
   protected readonly earnedBadges = () =>
