@@ -8,6 +8,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.clans': 'Клани',
     'nav.map': 'Карта серверу',
     'nav.applications': 'Заявки',
+    'nav.admin': 'Адмінка',
     'nav.rules': 'Правила',
 
     'menu.profile': 'Мій профіль',
@@ -209,6 +210,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.clans': 'Clans',
     'nav.map': 'Server map',
     'nav.applications': 'Applications',
+    'nav.admin': 'Admin',
     'nav.rules': 'Rules',
 
     'menu.profile': 'My profile',
