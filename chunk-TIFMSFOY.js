@@ -1,0 +1,1 @@
+import{Kb as o,Lb as a,Za as t}from"./chunk-24WRCY2C.js";var i=class e{name;static \u0275fac=function(n){return new(n||e)};static \u0275cmp=t({type:e,selectors:[["app-icon"]],hostAttrs:[1,"material-symbols-outlined"],inputs:{name:"name"},decls:1,vars:1,template:function(n,m){n&1&&o(0),n&2&&a(m.name)},encapsulation:2})};export{i as a};
